@@ -43,9 +43,32 @@ VMIController依次从队列中取出 VMI 的 event 进行对应的处理，整�
 - 对于 VMI 的删除，则直接删除掉所有相关联的 Pod 和附属 Pod（暂时还不知道包括哪些）。
 
 ### Scheduler
-当 VMI 对应的 Pod 创建成功之后，Kubernetes 会对该 Pod 进行调度，并在对应的节点上运行起来。根据官网上的架构图，Pod调度完成并运行之后，后续的逻辑应该交由virt-handler进行完成。
+当 VMI 对应的 Pod 创建成功之后，Kubernetes 会对该 Pod 进行调度，并在对应的节点上运行起来。根据官网上的架构图，Pod调度完成并运行之后，会将Pod调度到的NodeName写到VM中，后续的相应逻辑就交给virt-handler进行处理。
 
 ### Virt-handler
+
+
+Like the virt-controller, the virt-handler is also reactive, watching for changes to the VM object, and performing all necessary operations to change a VM to meet the required state. The virt-handler references the VM specification and signals the creation of a corresponding domain using a libvirtd instance in the VM's pod. When a VM object is deleted, the virt-handler observes the deletion and turns off the domain.
+
+
+
+
+Virt-handler也是一个控制器，主要是监听所有VM的事件，并进行
+
+
+### Virt-launcher
+
+
+
+
+
+
+
+
+### 参考链接
+
+https://kubernetes.io/blog/2018/05/22/getting-to-know-kubevirt/
+
 
 
 
