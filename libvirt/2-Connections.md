@@ -1136,13 +1136,63 @@ conn.GetCapabilities()
 * **零个或者多个**/guest子文档，每一个/guest子文档都表示host上可以启动的guest类型。guests是guest的arch（i686）和ABI（hvm，xen）的组合。
 
 ##### host
-比较简单的内容参考上述XML，这里只记录若干：
+比较简单的内容参考上述XML示例，这里只记录若干：
 * /host/topology：host的NUMA topology，每一个NUMA node都使用/host/topology/cells/cell表示哪些CPU位于该NUMA node下。当host是UMA（non-NUMA）时，只会有一个cell，所有的CPU都会在该cell下。
 * 
 ##### guest
-比较简单的内容参考上述XML，这里只记录若干：
+比较简单的内容参考上述XML示例，这里只记录若干：
 
 * /guest/arch/loader：guest type的firmware loader的默认路径，会被/guest/arch/domain/loader覆盖。
 * /guest/arch/machine：描述guest emulator可以emulate的默认机器类型，pc表示PCI based PC，isapc表示ISA based PC。
 
 
+### Host Information
+使用connection获取host的信息，包括hostname，maximum supported guest CPUs等。
+
+#### GetNodeInfo()
+```go
+func (c *Connect) GetNodeInfo() (*NodeInfo, error)
+
+type NodeInfo struct {
+	Model   string // CPU型号
+	Memory  uint64 // 内存大小（MB）
+	Cpus    uint   // active CPU数量
+	MHz     uint   // CPU频率
+	Nodes   uint32 // NUMA node数
+	Sockets uint32 // 每个NUMA node的socket数
+	Cores   uint32 // 每个socket的core数
+	Threads uint32 // 每个core的thread数
+
+}
+```
+#### GetCellsFreeMemory
+```go
+func (c *Connect) GetCellsFreeMemory(startCell int, maxCells int) ([]uint64, error) 
+```
+
+#### GetVersion
+
+分为libvirt library version和driver supported version，格式为1000000 * major + 1000 * minor + release。
+
+```go
+libvirt.GetVersion() // 7007000,7.7
+libvirt.VERSION_NUMBER // 7007000,7.7
+
+conn.GetVersion() // 6001000, 6.1
+```
+
+#### GetFreePages
+```go
+func (c *Connect) GetFreePages(pageSizes []uint64, startCell int, maxCells uint, flags uint32) ([]uint64, error)
+```
+
+```go
+pageSize := []uint64{4, 2048} // 单位是KB，4 for 4K（普通页），2048 for 2M（大页），看到官网还有一个1048576 for 1G.
+
+	fmt.Println(conn.GetFreePages(pageSize, 0, 1, 0))
+
+```
+在Mac平台上似乎获取不到页信息，还挺可惜的，报错如下。
+```shell
+virError(Code=84, Domain=0, Message='Operation not supported: page info is not supported on this platform')
+```
