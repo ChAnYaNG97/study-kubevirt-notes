@@ -1,6 +1,6 @@
 # Study Libvirt APIs （libvirt扫盲）
 
-主要是通过阅读官方的[Libvirt Application Development Guide Using Python](https://libvirt.org/docs/libvirt-appdev-guide-python/en-US/html/libvirt_application_development_guide_using_python-Introduction.html)学习，尝试使用go API复现主要内容。
+主要是通过阅读官方的[Libvirt Application Development Guide Using Python](https://libvirt.org/docs/libvirt-appdev-guide-python/en-US/html/libvirt_application_development_guide_using_python-Introduction.html)学习，尝试使用go API复现主要内容，所有的API介绍也以go提供的为准。
 
 
 ### 关键定义
@@ -24,6 +24,7 @@
 
 #### Guest domain
 代表一个运行的虚拟机或者能够启动一个虚拟机的配置。
+
 唯一标识：
 * ID: 正整数，每一个host上的domain的ID都是唯一的
 * name：字符串，每一个host上的domain的name都是唯一的
@@ -32,6 +33,7 @@
 #### Virtual networks
 
 Virtual networks提供guest domain的网络设备的连接方法
+
 唯一标识：
 * name：字符串，每一个host上的domain的name都是唯一的
 * UUID：全局唯一UUID
@@ -39,12 +41,14 @@ Virtual networks提供guest domain的网络设备的连接方法
 #### Storage pools
 
 用于管理host上的各种类型的存储，本地盘、逻辑卷组等。
+
 唯一标识：
 * name：字符串
 * UUID：全局唯一UUID
 
 #### Storage volumes
 指分配的一块存储空间，磁盘分区、逻辑卷等。一个volume可以被多个domain进行使用。
+
 唯一标识：
 * name：字符串，每一个storage pool中的volume的name都是唯一的
 * Key: 唯一标识pool中的volume，要求重启等操作过程中，保持稳定不变
@@ -52,6 +56,7 @@ Virtual networks提供guest domain的网络设备的连接方法
   
 #### Host devices
 指host上所有可用的硬件设备，包括物理设备、PCI设备、逻辑设备等。
+
 唯一标识：
 * name：字符串，每一个host上device的name都是唯一的
 
