@@ -89,9 +89,10 @@ conn.GetCapabilities()
 
 结果以一个XML的形式返回
 <details>
+  <summary>XML示例</summary>
+
 ```xml
 <capabilities>
-
   <host>
     <uuid>65ed7346-2ad5-41b2-9122-33b852277855</uuid>
     <cpu>
