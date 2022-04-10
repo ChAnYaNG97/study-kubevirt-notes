@@ -82,13 +82,13 @@ driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
 详见[原文](https://libvirt.org/docs/libvirt-appdev-guide-python/en-US/html/libvirt_application_development_guide_using_python-Connections-Remote_URIs.html)
 
 
-#### Capability Information Methods
+### Capability Information Methods
 ```
 conn.GetCapabilities()
 ```
 
 结果以一个XML的形式返回
-
+<details>
 ```xml
 <capabilities>
 
@@ -1127,6 +1127,7 @@ conn.GetCapabilities()
 
 </capabilities>
 ```
+</details>
 
 在返回的XML中，总是存在
 
