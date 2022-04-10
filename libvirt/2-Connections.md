@@ -1188,11 +1188,10 @@ func (c *Connect) GetFreePages(pageSizes []uint64, startCell int, maxCells uint,
 
 ```go
 pageSize := []uint64{4, 2048} // 单位是KB，4 for 4K（普通页），2048 for 2M（大页），看到官网还有一个1048576 for 1G.
-
-	fmt.Println(conn.GetFreePages(pageSize, 0, 1, 0))
+fmt.Println(conn.GetFreePages(pageSize, 0, 1, 0))
 
 ```
-在Mac平台上似乎获取不到页信息，还挺可惜的，报错如下。
+在Mac平台上似乎获取不到页信息，本来还挺期待看看什么结果，有点可惜，报错如下。
 ```shell
 virError(Code=84, Domain=0, Message='Operation not supported: page info is not supported on this platform')
 ```
