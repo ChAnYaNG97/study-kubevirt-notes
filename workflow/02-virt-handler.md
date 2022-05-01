@@ -24,4 +24,10 @@ func main() {
 注：此处想找一个 virt-handler 的 YAML 文件过来看一下都传了哪些参数，但是 kube-virt 的默认安装方式是通过 virt-operator 启动所有组件，这个目前先搁置一下，主要是好奇 Pod IP 是以什么形式传入的。
 
 
-然后调用 `app.Run()` 启动 virt-handler。
+然后调用 `app.Run()` 启动 virt-handler。判断有没有 app.HostOverride、app.PodAddress 等。然后将 Node 标记为不可调度状态。
+
+
+
+
+// 根据vmi的UID找到对应的client，底层采用的是基于文件socket的grpc通信。
+
