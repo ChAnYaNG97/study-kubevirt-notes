@@ -9,3 +9,11 @@
 - [ ] 底层原理
 
 ~开这个 repo 主要是提醒自己，在工作之余不要忘记学习:)~
+
+
+三大组件 // ongoing
+
+Volume Disk 相关 // todo
+
+watchDog // todo
+
