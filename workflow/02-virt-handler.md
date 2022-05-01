@@ -30,9 +30,26 @@ Virt-handler主体也是一个Controller，主要是对VMI的时间进行监听�
 
 然后调用 `defaultExecute()` 进行主要的 sync 流程。首先根据函数参数传入的 vmiExist、domainExist、VMI 的状态、Domain的状态、进行加工得到 domainAlive 状态，进一步判断 Domain 需要进行的操作状态（shutdown、delete、cleanup、update、ignoreSync，其中 cleanup 指对已经从 libvirt 中 deleted 的 Domain 进行处理的过程）。最后根据操作状态进行相应的操作，这里主要关注创建虚拟机的部分，即 `processVmUpdate()`。
 
+`processVmUpdate()` 函数主要是获取对应的 Pod （virt-lancher）的 grpc server 的 client，每一个 virt-handler 都会维护一个 key 为 VMI.UID， value 为 LauncherClientInfo 的 syncMap。
 
+```go
+type LauncherClientInfo struct {
+    // grpc 调用的接口
+	Client              cmdclient.LauncherClient
 
+    // grpc 使用的 socket file
+	SocketFile          string
 
+	DomainPipeStopChan  chan struct{}
 
-// 根据vmi的UID找到对应的client，底层采用的是基于文件socket的grpc通信。
+    // 记录最近一次判断是否 initialized 的时间
+	NotInitializedSince time.Time
 
+    // 是否处于就绪状态
+	Ready               bool
+}
+```
+
+根据 VMI 的UID找到对应的 client，底层采用的是基于文件socket的grpc通信。
+
+最终 `vmUpdateHelperDefault()` 调用 `client.SyncVirtualMachine(vmi, options)` 函数，向 grpc server 发送 `SyncVMI` command，交由 virt-launcher 进行后续处理。
